@@ -73,6 +73,11 @@ namespace NLog.Targets
         public bool ReportExceptionAsCrash { get; set; }
 
         /// <summary>
+        /// Get or set whether to use the structured logging template as the event name rather than the rendered message
+        /// </summary>
+        public bool UseTemplateAsMessage { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AppCenterTarget" /> class.
         /// </summary>
         public AppCenterTarget()
@@ -164,7 +169,7 @@ namespace NLog.Targets
         /// <inheritdoc />
         protected override void Write(LogEventInfo logEvent)
         {
-            var eventName = RenderLogEvent(Layout, logEvent);
+            var eventName = this.UseTemplateAsMessage ? logEvent.Message : RenderLogEvent(Layout, logEvent);
             var properties = BuildProperties(logEvent);
 
             if (string.IsNullOrWhiteSpace(eventName))
