@@ -172,13 +172,15 @@ namespace NLog.Targets
             var eventName = this.UseTemplateAsMessage ? logEvent.Message : RenderLogEvent(Layout, logEvent);
             var properties = BuildProperties(logEvent);
 
-            if (string.IsNullOrWhiteSpace(eventName))
+            if (string.IsNullOrWhiteSpace(eventName) || eventName == "{0}")
             {
                 // Avoid event being discarded when name is null or empty
                 if (logEvent.Exception != null)
                     eventName = logEvent.Exception.GetType().ToString();
                 else if (properties?.Count > 0)
                     eventName = nameof(AppCenterTarget);
+                else
+                    eventName = logEvent.Level.ToString();
             }
 
             TrackEvent(eventName, logEvent.Exception, properties);
@@ -222,13 +224,30 @@ namespace NLog.Targets
         {
             if (ReportExceptionAsCrash && exception != null)
             {
-                properties = properties ?? new Dictionary<string, string>(1);
-                if (properties.Count < 20)
-                    properties["EventName"] = eventName;
+                properties = properties ?? new Dictionary<string, string>();
+                AddData(ref properties, exception);
+
+                InternalLogger.Trace("AppCenter(Name={0}): calling Crashes.TrackError for exception {message} with {propertyCount} properties", exception?.Message, properties?.Count);
+
                 Microsoft.AppCenter.Crashes.Crashes.TrackError(exception, properties);
             }
 
+            InternalLogger.Trace("AppCenter(Name={0}): calling Analytics.TrackEvent for event {eventName} with {propertyCount} properties", eventName, properties?.Count);
             Microsoft.AppCenter.Analytics.Analytics.TrackEvent(eventName, properties);
+        }
+        private void AddData(ref IDictionary<string,string> properties, Exception exception, string prefix = "data")
+        {
+            foreach (var key in exception.Data.Keys)
+            {
+                if (key is string keyString && !properties.ContainsKey($"{prefix}:{keyString}"))
+                {
+                    properties.Add($"{prefix}:{keyString}", exception.Data[key].ToString());
+                }
+            }
+            if(exception.InnerException != null)
+            {
+                AddData(ref properties, exception.InnerException, "inner-" + prefix);
+            }
         }
     }
 }
