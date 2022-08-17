@@ -42,14 +42,14 @@
 
   <ItemGroup>
     <Reference Include="Microsoft.AppCenter">
-      <HintPath>..\..\..\appcenter-sdk-dotnet\SDK\AppCenter\Microsoft.AppCenter.WindowsDesktop\bin\Release\net472\Microsoft.AppCenter.dll</HintPath>
+      <HintPath>..\..\..\AppCenter\SDK\AppCenter\Microsoft.AppCenter.WindowsDesktop\bin\Debug\net472\Microsoft.AppCenter.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Analytics">
-      <HintPath>..\..\..\appcenter-sdk-dotnet\SDK\AppCenterAnalytics\Microsoft.AppCenter.Analytics.WindowsDesktop\bin\Release\net472\Microsoft.AppCenter.Analytics.dll</HintPath>
+      <HintPath>..\..\..\AppCenter\SDK\AppCenterAnalytics\Microsoft.AppCenter.Analytics.WindowsDesktop\bin\Debug\net472\Microsoft.AppCenter.Analytics.dll</HintPath>
       <SpecificVersion>false</SpecificVersion>
     </Reference>
     <Reference Include="Microsoft.AppCenter.Crashes">
-      <HintPath>..\..\..\appcenter-sdk-dotnet\SDK\AppCenterCrashes\Microsoft.AppCenter.Crashes.WindowsDesktop\bin\Release\net472\Microsoft.AppCenter.Crashes.dll</HintPath>
+      <HintPath>..\..\..\AppCenter\SDK\AppCenterCrashes\Microsoft.AppCenter.Crashes.WindowsDesktop\bin\Debug\net472\Microsoft.AppCenter.Crashes.dll</HintPath>
       <SpecificVersion>false</SpecificVersion>
     </Reference>
   </ItemGroup>
